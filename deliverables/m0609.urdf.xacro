@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="m0609">
+    <xacro:arg name="initial_positions_file" default="initial_positions.yaml" />
+    <!-- Mobile base position (world frame). Defaults match the counter-wiping
+         configuration; mirror-wiping launch passes base_y:=0.30 so the robot
+         straddles the counter side edge and gains reach over the side mirror. -->
+    <xacro:arg name="base_x" default="0.0" />
+    <xacro:arg name="base_y" default="0.0" />
+    <xacro:arg name="base_z" default="0.85" />
+    <link name="world"/>
+    <joint name="world_fixed" type="fixed">
+        <origin xyz="$(arg base_x) $(arg base_y) $(arg base_z)" rpy="0 0 0"/>
+        <parent link="world"/>
+        <child link="base_link"/>
+    </joint>
+    <!-- Import m0609 urdf file -->
+    <xacro:include filename="$(find dsr_description2)/urdf/m0609.urdf" />
+
+    <!-- Import m0609 ros2_control description -->
+    
+    <xacro:include filename="dsr.ros2_control.xacro" />
+
+    <xacro:dsr_moveit_ros2_control name="DSRFakeSystem" initial_positions_file="$(arg initial_positions_file)"/>
+</robot>
